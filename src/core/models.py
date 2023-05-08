@@ -1,14 +1,15 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
-class Owner(models.Model):
-    """ The owner of each shopping list
-    """
-    name = models.CharField(max_length=50, null=False, blank=False)
-    email = models.EmailField(unique=True, null=False, blank=False)
-
-    def __str__(self):
-        return self.name
+# class Owner(models.Model):
+#     """ The owner of each shopping list
+#     """
+#     name = models.CharField(max_length=50, null=False, blank=False)
+#     email = models.EmailField(unique=True, null=False, blank=False)
+#
+#     def __str__(self):
+#         return self.name
 
 
 class Category(models.Model):
@@ -45,10 +46,10 @@ class ShoppingListProduct(models.Model):
 
     class Meta:
         db_table = 'shopping_list_product'
-        constraints = [
-            models.UniqueConstraint(fields=['product', 'price', 'price_unit', 'amount', 'amount_unit'],
-                                    name='unique_shopping_list_product')
-        ]
+        # constraints = [
+        #     models.UniqueConstraint(fields=['product', 'price', 'price_unit', 'amount', 'amount_unit', 'checked'],
+        #                             name='unique_shopping_list_product')
+        # ]
 
 
 class ShoppingList(models.Model):
@@ -57,7 +58,7 @@ class ShoppingList(models.Model):
 
     name = models.CharField(max_length=50, unique=True)
     shopping_list_products = models.ManyToManyField('ShoppingListProduct', related_name='shopping_lists')
-    owner = models.ForeignKey(Owner, related_name='owned_shopping_lists', on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, related_name='owned_shopping_lists', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
